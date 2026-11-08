@@ -27,7 +27,7 @@
             "automation"
           ],
           "url": "https://raw.githubusercontent.com/Ayeez757/wakatime-sync/main/dist/wakatime-sync-0.4.0.tmplugin",
-          "sha256": "b6a70bd25b7444c9ff538cd3efee389a6605459014ca70174ec920dc122f171f",
+          "sha256": "3d025c8b39ac2c95db1170f2bf67f1278e1070c5eac0e98443380ddbf15b739c",
           "engines": {
             "tokenMonitor": ">=0.82.0"
           },

@@ -18,6 +18,8 @@ jobs:
       - name: Fetch Token Monitor packager
         run: |
           git clone --depth 1 --branch v0.87.0 https://github.com/Javis603/token-monitor.git /tmp/token-monitor
+          cd /tmp/token-monitor
+          npm ci --omit=dev --no-audit --no-fund
       - name: Build package
         run: TM_REPO=/tmp/token-monitor npm run build
       - name: Create release
