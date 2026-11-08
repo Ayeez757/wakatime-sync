@@ -21,7 +21,7 @@ jobs:
           cd /tmp/token-monitor
           npm ci --omit=dev --no-audit --no-fund
       - name: Build package
-        run: TM_REPO=/tmp/token-monitor npm run build
+        run: TM_REPO=/tmp/token-monitor npm run build -- --force
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
