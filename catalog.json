@@ -34,7 +34,12 @@
           "changelog": "See https://github.com/Ayeez757/wakatime-sync/blob/main/CHANGELOG.md"
         }
       ],
-      "repository": "https://github.com/Ayeez757/wakatime-sync"
+      "repository": "https://github.com/Ayeez757/wakatime-sync",
+      "readmePaths": {
+        "en": "README.en.md",
+        "zh-CN": "README.md",
+        "zh-TW": "README.zh-TW.md"
+      }
     }
   ]
 }

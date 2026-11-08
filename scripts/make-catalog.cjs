@@ -29,6 +29,7 @@ entry.name = manifest.name;
 entry.description = manifest.description;
 entry.author = manifest.author;
 entry.repository = repository;
+entry.readmePaths = { en: 'README.en.md', 'zh-CN': 'README.md', 'zh-TW': 'README.zh-TW.md' };
 entry.versions = entry.versions.filter(version => version.version !== manifest.version);
 entry.versions.unshift({
   version: manifest.version,
