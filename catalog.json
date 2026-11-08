@@ -1,0 +1,40 @@
+{
+  "format": 1,
+  "title": {
+    "en": "Ayeez757 plugins",
+    "zh-CN": "Ayeez757 插件"
+  },
+  "plugins": [
+    {
+      "id": "wakatime-sync",
+      "name": {
+        "en": "WakaTime sync",
+        "zh-CN": "WakaTime 同步",
+        "zh-TW": "WakaTime 同步"
+      },
+      "description": {
+        "en": "Send Token Monitor AI token usage to WakaTime as heartbeats, and show your WakaTime day in a card. Works for one machine or a shared Hub.",
+        "zh-CN": "把 Token Monitor 的 AI token 用量作为 WakaTime 心跳上报，并在卡片里显示 WakaTime 当天数据；单机或共享 Hub 都能用。",
+        "zh-TW": "把 Token Monitor 的 AI token 用量作為 WakaTime 心跳上報，並在卡片裡顯示 WakaTime 當天資料；單機或共享 Hub 都能用。"
+      },
+      "author": "Ayeez757",
+      "versions": [
+        {
+          "version": "0.4.0",
+          "types": [
+            "widget",
+            "page",
+            "automation"
+          ],
+          "url": "https://raw.githubusercontent.com/Ayeez757/wakatime-sync/main/dist/wakatime-sync-0.4.0.tmplugin",
+          "sha256": "b6a70bd25b7444c9ff538cd3efee389a6605459014ca70174ec920dc122f171f",
+          "engines": {
+            "tokenMonitor": ">=0.82.0"
+          },
+          "changelog": "See https://github.com/Ayeez757/wakatime-sync/blob/main/CHANGELOG.md"
+        }
+      ],
+      "repository": "https://github.com/Ayeez757/wakatime-sync"
+    }
+  ]
+}

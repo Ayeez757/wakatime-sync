@@ -1,0 +1,330 @@
+{
+  "tmApi": 1,
+  "id": "wakatime-sync",
+  "name": {
+    "en": "WakaTime sync",
+    "zh-CN": "WakaTime 同步",
+    "zh-TW": "WakaTime 同步"
+  },
+  "description": {
+    "en": "Send Token Monitor AI token usage to WakaTime as heartbeats, and show your WakaTime day in a card. Works for one machine or a shared Hub.",
+    "zh-CN": "把 Token Monitor 的 AI token 用量作为 WakaTime 心跳上报，并在卡片里显示 WakaTime 当天数据；单机或共享 Hub 都能用。",
+    "zh-TW": "把 Token Monitor 的 AI token 用量作為 WakaTime 心跳上報，並在卡片裡顯示 WakaTime 當天資料；單機或共享 Hub 都能用。"
+  },
+  "version": "0.4.0",
+  "author": "Ayeez757",
+  "homepage": "https://github.com/Ayeez757/wakatime-sync",
+  "ui": "ui.mjs",
+  "backend": "backend.cjs",
+  "css": [
+    "panel.css"
+  ],
+  "files": [
+    "ui.mjs",
+    "backend.cjs",
+    "shared/wakatime-core.cjs",
+    "panel.css",
+    "README.md",
+    "README.zh-CN.md",
+    "README.zh-TW.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "assets/icon.svg"
+  ],
+  "background": true,
+  "backgroundDescription": {
+    "en": "Polls Token Monitor usage every minute and posts token deltas to WakaTime.",
+    "zh-CN": "每分钟读取 Token Monitor 的用量变化，并把 token 增量上报到 WakaTime。",
+    "zh-TW": "每分鐘讀取 Token Monitor 的用量變化，並把 token 增量上報到 WakaTime。"
+  },
+  "category": "automation",
+  "engines": {
+    "tokenMonitor": ">=0.82.0"
+  },
+  "views": [
+    {
+      "id": "card",
+      "title": {
+        "en": "WakaTime sync",
+        "zh-CN": "WakaTime 同步",
+        "zh-TW": "WakaTime 同步"
+      },
+      "surfaces": [
+        "home",
+        "page"
+      ],
+      "defaultSurfaces": [
+        "home",
+        "page"
+      ]
+    }
+  ],
+  "settings": {
+    "version": 3,
+    "fields": [
+      {
+        "id": "enabled",
+        "type": "boolean",
+        "label": {
+          "en": "Send heartbeats to WakaTime",
+          "zh-CN": "向 WakaTime 发送心跳",
+          "zh-TW": "向 WakaTime 傳送心跳"
+        },
+        "description": {
+          "en": "Off pauses uploads but keeps saved baselines.",
+          "zh-CN": "关闭后暂停上报，但保留已保存的 token 基线。",
+          "zh-TW": "關閉後暫停上報，但保留已儲存的 token 基準。"
+        },
+        "default": false
+      },
+      {
+        "id": "apiKey",
+        "type": "string",
+        "label": {
+          "en": "WakaTime API key",
+          "zh-CN": "WakaTime API key",
+          "zh-TW": "WakaTime API key"
+        },
+        "description": {
+          "en": "Write-only plugin key from wakatime.com/api-key. Stored in this plugin's preference file, which is plain JSON, not a secret vault.",
+          "zh-CN": "wakatime.com/api-key 的插件专用 key（只写）。保存在插件普通偏好文件（明文 JSON），不是加密保险库。",
+          "zh-TW": "wakatime.com/api-key 的外掛專用 key（唯寫）。儲存在外掛一般偏好檔案（明文 JSON），不是加密保險箱。"
+        },
+        "default": "",
+        "maxLength": 200
+      },
+      {
+        "id": "oauthToken",
+        "type": "string",
+        "label": {
+          "en": "WakaTime OAuth access token (optional, read stats)",
+          "zh-CN": "WakaTime OAuth access token（可选，读取统计）",
+          "zh-TW": "WakaTime OAuth access token（可選，讀取統計）"
+        },
+        "description": {
+          "en": "Personal token from wakatime.com/oauth. API keys cannot read stats; only the WakaTime card needs this.",
+          "zh-CN": "来自 wakatime.com/oauth 的个人 token。API key 只能写不能读，只有卡片统计需要它。",
+          "zh-TW": "來自 wakatime.com/oauth 的個人 token。API key 只能寫不能讀，只有卡片統計需要它。"
+        },
+        "default": "",
+        "maxLength": 4096
+      },
+      {
+        "id": "scope",
+        "type": "select",
+        "label": {
+          "en": "Which sessions to upload",
+          "zh-CN": "上报哪些会话",
+          "zh-TW": "上報哪些工作階段"
+        },
+        "description": {
+          "en": "Auto keeps this machine only when the App reads a shared Hub, so other devices are never uploaded twice. Choose all devices only when nothing else reports them.",
+          "zh-CN": "选“自动”时，若 App 数据源是共享 Hub，只上报本机设备，避免其他设备被重复上报；只有没有其他上报方时才选“所有设备”。",
+          "zh-TW": "選「自動」時，若 App 資料來源是共享 Hub，只上報本機裝置，避免其他裝置被重複上報；只有沒有其他上報方時才選「所有裝置」。"
+        },
+        "default": "auto",
+        "options": [
+          {
+            "value": "auto",
+            "label": {
+              "en": "Auto (this machine when detected)",
+              "zh-CN": "自动（检测到本机时只用本机）",
+              "zh-TW": "自動（偵測到本機時只用本機）"
+            }
+          },
+          {
+            "value": "this-device",
+            "label": {
+              "en": "This machine only",
+              "zh-CN": "仅本机",
+              "zh-TW": "僅本機"
+            }
+          },
+          {
+            "value": "aggregate",
+            "label": {
+              "en": "All devices (Hub aggregate)",
+              "zh-CN": "所有设备（Hub 汇总）",
+              "zh-TW": "所有裝置（Hub 彙總）"
+            }
+          }
+        ]
+      },
+      {
+        "id": "category",
+        "type": "select",
+        "label": {
+          "en": "WakaTime category",
+          "zh-CN": "WakaTime 分类",
+          "zh-TW": "WakaTime 分類"
+        },
+        "description": {
+          "en": "AI coding keeps AI work separate from manual Coding in WakaTime charts.",
+          "zh-CN": "选 ai coding 可让 AI 工作与手工 Coding 在 WakaTime 图表里分开统计。",
+          "zh-TW": "選 ai coding 可讓 AI 工作與手動 Coding 在 WakaTime 圖表裡分開統計。"
+        },
+        "default": "ai coding",
+        "options": [
+          {
+            "value": "ai coding",
+            "label": {
+              "en": "AI coding",
+              "zh-CN": "AI coding",
+              "zh-TW": "AI coding"
+            }
+          },
+          {
+            "value": "coding",
+            "label": {
+              "en": "Coding",
+              "zh-CN": "Coding",
+              "zh-TW": "Coding"
+            }
+          },
+          {
+            "value": "writing docs",
+            "label": {
+              "en": "Writing docs",
+              "zh-CN": "Writing docs",
+              "zh-TW": "Writing docs"
+            }
+          },
+          {
+            "value": "researching",
+            "label": {
+              "en": "Researching",
+              "zh-CN": "Researching",
+              "zh-TW": "Researching"
+            }
+          }
+        ]
+      },
+      {
+        "id": "includeCacheTokens",
+        "type": "boolean",
+        "label": {
+          "en": "Count cached input tokens as ai_input_tokens",
+          "zh-CN": "把缓存命中/写入 token 计入 ai_input_tokens",
+          "zh-TW": "把快取命中／寫入 token 計入 ai_input_tokens"
+        },
+        "description": {
+          "en": "Cached prompt tokens dominate real AI spend; turn this off if you only want fresh input tokens.",
+          "zh-CN": "缓存 token 占 AI 成本大头；只统计新输入 token 时关闭。",
+          "zh-TW": "快取 token 佔 AI 成本大宗；只統計新輸入 token 時關閉。"
+        },
+        "default": true
+      },
+      {
+        "id": "projectMode",
+        "type": "select",
+        "label": {
+          "en": "Project name source",
+          "zh-CN": "项目名来源",
+          "zh-TW": "專案名來源"
+        },
+        "description": {
+          "en": "Label uses Token Monitor's project name; folder uses the workspace folder; none leaves WakaTime projects empty.",
+          "zh-CN": "label 用 Token Monitor 的项目名；folder 用工作区文件夹名；none 不上报项目。",
+          "zh-TW": "label 用 Token Monitor 的專案名；folder 用工作區資料夾名；none 不上報專案。"
+        },
+        "default": "label",
+        "options": [
+          {
+            "value": "label",
+            "label": {
+              "en": "Token Monitor project label",
+              "zh-CN": "Token Monitor 项目名",
+              "zh-TW": "Token Monitor 專案名"
+            }
+          },
+          {
+            "value": "folder",
+            "label": {
+              "en": "Workspace folder name",
+              "zh-CN": "工作区文件夹名",
+              "zh-TW": "工作區資料夾名"
+            }
+          },
+          {
+            "value": "none",
+            "label": {
+              "en": "No project",
+              "zh-CN": "不上报项目",
+              "zh-TW": "不上報專案"
+            }
+          }
+        ]
+      },
+      {
+        "id": "projectPrefix",
+        "type": "string",
+        "label": {
+          "en": "Project name prefix",
+          "zh-CN": "项目名前缀",
+          "zh-TW": "專案名前綴"
+        },
+        "description": {
+          "en": "Optional, for example \"ai-\" to keep AI projects visually grouped.",
+          "zh-CN": "可选，例如 \"ai-\"，让 AI 项目在 WakaTime 里成组显示。",
+          "zh-TW": "可選，例如 \"ai-\"，讓 AI 專案在 WakaTime 裡成組顯示。"
+        },
+        "default": "",
+        "maxLength": 64
+      },
+      {
+        "id": "pollSeconds",
+        "type": "number",
+        "label": {
+          "en": "Upload interval (seconds)",
+          "zh-CN": "上报间隔（秒）",
+          "zh-TW": "上報間隔（秒）"
+        },
+        "default": 60,
+        "min": 30,
+        "max": 900,
+        "integer": true
+      },
+      {
+        "id": "preferHub",
+        "type": "boolean",
+        "label": {
+          "en": "Let the Hub bridge upload when present",
+          "zh-CN": "检测到 Hub 桥时由 Hub 上报",
+          "zh-TW": "偵測到 Hub 橋時由 Hub 上報"
+        },
+        "description": {
+          "en": "When this machine's Token Monitor points at a Hub whose bridge answers on port 17322, the bridge uploads every device and this plugin pauses to avoid double counting. Falls back to local uploads when the bridge is unreachable.",
+          "zh-CN": "当本机 Token Monitor 连接的 Hub 上运行着桥（17322 端口应答）时，由 Hub 统一上报所有设备，本插件暂停以避免重复计数；桥不可达时自动恢复本机上报。",
+          "zh-TW": "當本機 Token Monitor 連線的 Hub 上執行著橋（17322 埠應答）時，由 Hub 統一上報所有裝置，此外掛暫停以避免重複計數；橋不可達時自動恢復本機上報。"
+        },
+        "default": true
+      },
+      {
+        "id": "hubBridgeUrl",
+        "type": "string",
+        "label": {
+          "en": "Hub bridge URL (optional)",
+          "zh-CN": "Hub 桥地址（可选）",
+          "zh-TW": "Hub 橋位址（可選）"
+        },
+        "description": {
+          "en": "Empty means auto: same host as the Hub, port 17322. Set it only when the bridge listens elsewhere.",
+          "zh-CN": "留空表示自动：与 Hub 同主机、17322 端口。桥不在该地址时才需要填。",
+          "zh-TW": "留空表示自動：與 Hub 同主機、17322 埠。橋不在該位址時才需要填。"
+        },
+        "default": "",
+        "maxLength": 512
+      },
+      {
+        "id": "dryRun",
+        "type": "boolean",
+        "label": {
+          "en": "Dry run (log heartbeats without sending)",
+          "zh-CN": "试运行（只记录，不发送）",
+          "zh-TW": "試執行（只記錄，不傳送）"
+        },
+        "default": false
+      }
+    ]
+  }
+}

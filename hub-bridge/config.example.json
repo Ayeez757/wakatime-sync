@@ -1,0 +1,16 @@
+{
+  "hubUrl": "http://127.0.0.1:17321",
+  "hubSecretFile": "/home/ayeez/token-monitor/.hubsecret",
+  "wakatimeApiKey": "waka_REPLACE_ME",
+  "pollSeconds": 60,
+  "timezone": "Asia/Shanghai",
+  "devices": [],
+  "projectPrefix": "",
+  "projectOverrides": {},
+  "presenceEnabled": true,
+  "presenceHost": "0.0.0.0",
+  "presencePort": 17322,
+  "dryRun": false,
+  "postInitial": false,
+  "backfillWindowMinutes": 15
+}

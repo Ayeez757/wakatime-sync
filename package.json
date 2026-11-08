@@ -1,0 +1,17 @@
+{
+  "name": "wakatime-sync",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Token Monitor plugin that pushes AI token usage to WakaTime, plus a multi-device Hub bridge.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.15.0"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.cjs\"",
+    "check": "node scripts/check.cjs",
+    "verify": "npm run check && npm test",
+    "build": "node scripts/build-plugin.cjs",
+    "catalog": "node scripts/make-catalog.cjs"
+  }
+}
