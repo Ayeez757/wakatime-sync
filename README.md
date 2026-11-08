@@ -1,115 +1,121 @@
-# WakaTime sync for Token Monitor
+<p align="right"><strong>简体中文</strong> | <a href="./README.en.md">English</a> | <a href="./README.zh-TW.md">繁體中文</a></p>
 
-Send Token Monitor's AI token usage to [WakaTime](https://wakatime.com) as **AI Coding** heartbeats, and read your WakaTime day back in a compact card.
-Works on a single machine and on a multi-device Token Monitor Hub (a Hub-side bridge is included in this repository).
+# Token Monitor 的 WakaTime 同步
 
-> Unofficial community integration. Not affiliated with WakaTime or the Token Monitor maintainers.
+把 Token Monitor 的 AI token 用量以 WakaTime 的 **AI Coding** 心跳上报，并在紧凑卡片里读回 WakaTime 当天数据。
+单机可用，共享 Hub 的多设备场景也有配套的 Hub 桥（本仓库 `hub-bridge/`）。
 
-## What it does
+> 非官方社区集成，与 WakaTime 官方及 Token Monitor 维护者无关。
 
-Token Monitor tracks tokens per AI session across 50+ coding tools; WakaTime tracks time per editor file.
-Every poll this plugin diffs each session's token counters and posts only the increment as
-`POST /api/v1/users/current/heartbeats.bulk`:
+## 它做什么
 
-| Token Monitor | WakaTime heartbeat |
+Token Monitor 按 AI 会话统计 50+ 种编程工具的 token，WakaTime 按编辑器文件统计时间。
+插件每轮只上报增量，调用 `POST /api/v1/users/current/heartbeats.bulk`：
+
+| Token Monitor | WakaTime 心跳 |
 | --- | --- |
-| client (`codex`, `dsh`, `claude`…) | `entity: token-monitor:<client>` |
-| category | `ai coding` (configurable) |
-| session | `ai_session` |
-| input + cache-read/write deltas | `ai_input_tokens` |
-| output delta | `ai_output_tokens` |
-| project label or workspace folder | `project` |
-| device hostname / timezone | `X-Machine-Name` / `Timezone` headers |
-| plugin version | User-Agent `token-monitor/<version>` |
+| 客户端（`codex`、`dsh`、`claude`…） | `entity: token-monitor:<client>` |
+| 分类 | `ai coding`（可配置） |
+| 会话 | `ai_session` |
+| input + 缓存读/写增量 | `ai_input_tokens` |
+| output 增量 | `ai_output_tokens` |
+| 项目名或工作区文件夹 | `project` |
+| 设备主机名 / 时区 | `X-Machine-Name` / `Timezone` 请求头 |
+| 插件版本 | User-Agent `token-monitor/<version>` |
 
-WakaTime then shows AI Coding time and AI token counters next to your manual coding stats.
-AI *model* attribution stays with WakaTime's own CLI parsers: a custom model token in our User-Agent was read as a bogus model with invented cost, so none is sent.
+之后 WakaTime 的 AI Coding 时长与 AI token 计数会和手工编码并排出现。
+AI **模型**归属交给 WakaTime 自己的 CLI 解析器：我们试过往 UA 塞自定义模型，会被当成虚构模型并推算出成本，所以不再发送。
 
-## Compatibility
+## 兼容性
 
-- Token Monitor: `>=0.82.0` (plugin API `tmApi: 1`, experimental). Built and exercised against 0.87.x.
-- Plugin UI: Windows 11 (Token Monitor desktop). Other desktop platforms use the same host APIs but were not exercised here.
-- Hub bridge: Node 22.15+ on Linux/macOS (the same Node the Token Monitor hub uses).
+- Token Monitor：`>=0.82.0`（插件 API `tmApi: 1`，实验性）。构建与验证基于 0.87.x。
+- 插件 UI：Windows 11（Token Monitor 桌面端）。其他桌面平台使用同一套宿主 API，但未在此环境验证。
+- Hub 桥：Node 22.15+，Linux/macOS（与 Token Monitor hub 使用同一 Node）。
 
-## Install
+## 安装
 
-1. Download the latest `wakatime-sync-<version>.tmplugin` from [Releases](https://github.com/Ayeez757/wakatime-sync/releases).
-2. Token Monitor → Settings → Plugins → import the file (or this folder) → review the trusted-code warning → **Trust, install and enable**.
-3. Open the plugin settings and paste the write-only API key from <https://wakatime.com/api-key>.
-4. Turn on **Send heartbeats to WakaTime**, and approve **background execution** so uploads continue while Token Monitor runs.
-5. Optional: paste a personal OAuth token from <https://wakatime.com/oauth> to show WakaTime totals in the card. API keys are write-only, so stats always need an OAuth token.
+1. 从 [Releases](https://github.com/Ayeez757/wakatime-sync/releases) 下载最新的 `wakatime-sync-<版本>.tmplugin`。
+2. Token Monitor → 设置 → 插件 → 导入该文件（或本目录）→ 阅读可信代码警告 → **信任并安装启用**。
+3. 在插件设置里填入 <https://wakatime.com/api-key> 的插件专用 key（只写）。
+4. 打开「向 WakaTime 发送心跳」，首次启用时同意**后台执行**，Token Monitor 运行期间就会持续上报。
+5. 可选：填入 <https://wakatime.com/oauth> 的个人 OAuth token，卡片才会显示 WakaTime 统计。API key 只能写不能读。
 
-Start with **Dry run** if you want to see heartbeat payloads without touching your WakaTime account.
+建议先打开「试运行」，确认心跳载荷后再正式发送。
 
-## Choose your setup
+## 按场景选择
 
-| Setup | Settings |
+| 场景 | 设置 |
 | --- | --- |
-| One machine, local collection | `scope: auto`, `category: ai coding`, cache tokens on |
-| Several machines on a shared Hub, bridge running on the Hub | Keep `preferHub` on: the plugin asks the bridge each poll and stands by; the Hub uploads every device. |
-| Several machines, no Hub bridge | Run the plugin on each machine with `scope: auto`; each uploads only its own sessions. |
-| Dashboard only | Leave uploads off and set the OAuth token. |
-| WakaTime already records AI coding | WakaTime's CLI parses Claude/Codex/Copilot/DeepSeek/Cursor transcripts by default. If it already covers your sessions, leave uploads off (card only) or you double count. |
+| 单机本地采集 | `scope: auto`、`category: ai coding`、计入缓存 token |
+| 多设备共享 Hub 且 Hub 上跑着桥 | 保持「检测到 Hub 桥时由 Hub 上报」开启：插件每轮询问桥并待命，由 Hub 统一上报所有设备 |
+| 多设备但没有 Hub 桥 | 每台机器都开插件，`scope: auto` 只上报本机会话 |
+| 只看板、不上报 | 关闭上报，只填 OAuth token |
+| WakaTime 已经在记 AI coding | WakaTime 的 CLI 默认会解析 Claude/Codex/Copilot/DeepSeek/Cursor 转录。若已覆盖你的会话，请关掉本插件上报（只留卡片），否则会重复计数 |
 
-Never run two uploaders for the same sessions (this plugin, the Hub bridge, WakaTime's own AI sync). Pick one per machine/account.
+同一个账号/机器只保留一个上报方：本插件、Hub 桥、WakaTime 自带 AI sync 三选一。
 
-## Settings
+## 设置项
 
-| Setting | Default | Purpose |
+| 设置 | 默认 | 作用 |
 | --- | --- | --- |
-| Send heartbeats to WakaTime | off | Upload master switch. |
-| WakaTime API key | — | Write-only key for heartbeats. |
-| WakaTime OAuth access token | — | Read-only stats for the card. |
-| Which sessions to upload | auto | `auto` resolves this machine through Hub devices; `this-device` pins it; `aggregate` uploads the whole Hub. If the hostname cannot be matched on a multi-device Hub the plugin **fails closed** instead of uploading other machines. |
-| WakaTime category | ai coding | `coding` merges with manual coding; other WakaTime categories are available. |
-| Count cached input tokens | on | Adds cache read/write tokens to `ai_input_tokens`. |
-| Project name source | label | Token Monitor label, workspace folder, or no project. |
-| Project name prefix | — | Optional, e.g. `ai-`. |
-| Upload interval | 60 s | 30–900 seconds; changes apply without reloading the plugin. |
-| Let the Hub bridge upload | on | Stand by while the Hub bridge answers on port 17322. |
-| Hub bridge URL | auto | Empty = same host as the Hub, port 17322. |
-| Dry run | off | Log payloads without sending. |
+| 向 WakaTime 发送心跳 | 关 | 上报总开关 |
+| WakaTime API key | — | 心跳用的只写 key |
+| WakaTime OAuth access token | — | 卡片读统计 |
+| 上报哪些会话 | auto | 用 Hub 设备列表定位本机；多设备 Hub 上匹配不到本机时**直接暂停上报**，绝不误传其他设备；`aggregate` 才上报全 Hub |
+| WakaTime 分类 | ai coding | 选 `coding` 会并入手工编码，也可选其他分类 |
+| 计入缓存 token | 开 | 把缓存读/写计入 `ai_input_tokens` |
+| 项目名来源 | label | Token Monitor 项目名 / 工作区文件夹名 / 不上报 |
+| 项目名前缀 | — | 可选，例如 `ai-` |
+| 上报间隔 | 60 秒 | 30–900 秒，修改后无需重新加载插件 |
+| 检测到 Hub 桥时由 Hub 上报 | 开 | 桥在 17322 端口应答时本插件待命 |
+| Hub 桥地址 | 自动 | 留空 = 与 Hub 同主机 + 17322 端口 |
+| 试运行 | 关 | 只记录不发送 |
 
-## How the counts behave
+## 计数行为
 
-- First run only records baselines; it never dumps a whole day at once.
-- Day rollover and counter regressions rebuild baselines instead of sending negative values.
-- Baselines are keyed by client + device + immutable session start time, so an App restart does not lose deltas because an opaque row id changed.
-- One heartbeat per session per poll; models are merged for the payload and heartbeats inside a batch get distinct sub-second times.
-- Missing or unavailable session data is shown as such, never treated as zero; truncated pagination is labelled `(partial)`.
+- 首轮只记录基线，不会一次性补发当天历史。
+- 跨天或计数回退时重建基线，不发负数。
+- 基线用「客户端 + 设备 + 会话开始时间」做 key，App 重启后不会因不透明行 id 变化而丢增量。
+- 每轮每个会话一条心跳；多模型合并计算，同一批心跳使用不同的亚秒时间。
+- 会话数据不可用时如实显示，绝不当作 0；分页被截断时显示 `(partial)`。
 
-## Card
+## 卡片
 
-Upload state, heartbeats today, uploaded input/output tokens, upload scope, tracked sessions, last upload, last check, session-data availability, then the WakaTime day: total coded time, AI Coding time, AI tokens, AI models with cost, categories, projects and machines.
-`Refresh` forces one poll and one stats read (stats reads are cached for 30 seconds).
+上报状态、今日心跳、已上报 input/output token、上报范围、已跟踪会话、最近上报、上次检查、会话数据可用性；
+以及 WakaTime 当天：编码总时长、AI Coding 时长、AI token、AI 模型（含成本）、分类、项目、机器。
+「刷新」会强制轮询并重读统计（统计缓存 30 秒）。
 
-## Hub bridge (multi-device)
+## Hub 桥（多设备）
 
-`hub-bridge/` contains a headless Node process that reads the Hub's `/api/stats` and posts the same heartbeats for every device, plus a presence endpoint (`POST /presence/plugin`, `GET /presence`) the desktop plugin uses to coordinate. See [hub-bridge/README.md](hub-bridge/README.md).
+`hub-bridge/` 是无头 Node 进程：读 Hub 的 `/api/stats`，为所有设备发送同样的心跳，并暴露 presence 接口
+（`POST /presence/plugin`、`GET /presence`）供桌面插件协调。说明见 [hub-bridge/README.md](hub-bridge/README.md)。
 
-## Data and access
+## 数据与访问
 
-- Runs as trusted code with your OS user's file and network authority; it is not sandboxed.
-- Sends only token counts, session ids, project names, machine name, timezone and replies to WakaTime and the configured Hub.
-- Never sends prompts, transcripts, file paths, account emails or provider credentials.
-- The API key, OAuth token and Hub shared secret are read from Token Monitor settings; the plugin stores its baselines (`state.json`, mode 0600) and preferences (plain JSON, not an encrypted vault) in the plugin data directory.
-- The bridge stores config and baselines beside its config file (`~/.config/wakatime-bridge/` by default), both mode 0600.
+- 插件属于可信代码，拥有本机用户的文件与网络权限，不做沙箱隔离。
+- 只向 WakaTime 与配置的 Hub 发送 token 计数、会话 id、项目名、机器名、时区。
+- 不会发送 prompt、对话内容、文件路径、账号邮箱或供应商凭证。
+- API key、OAuth token、Hub 共享密钥从 Token Monitor 设置读取；基线（`state.json`，权限 0600）与插件偏好（明文 JSON，非加密保险库）保存在插件数据目录。
+- 桥的配置与基线默认放在 `~/.config/wakatime-bridge/`，权限 0600。
 
-## Updates
+## 更新
 
-Releases are published on [GitHub Releases](https://github.com/Ayeez757/wakatime-sync/releases); replace the package through Settings → Plugins. An optional HTTPS catalog lives at `catalog.json` in this repository — add `https://raw.githubusercontent.com/Ayeez757/wakatime-sync/main/catalog.json` under Plugins → Discover → Custom catalog sources to receive updates in-app. Rollback restores code, not plugin data.
+发布在 [GitHub Releases](https://github.com/Ayeez757/wakatime-sync/releases)，通过 设置 → 插件 替换包即可。
+仓库根目录的 `catalog.json` 可作为 HTTPS catalog：在 设置 → 插件 → 发现 → 更多 → 自定义 catalog 源 里添加
+`https://raw.githubusercontent.com/Ayeez757/wakatime-sync/main/catalog.json` 可在应用内发现更新。
+回滚只恢复代码，不回滚插件数据。
 
-## Development
+## 开发
 
 ```sh
-npm run check     # syntax, manifest, secret scan
-npm test          # unit tests (no network)
-npm run build     # build dist/<id>-<version>.tmplugin (needs TM_REPO token-monitor checkout)
-npm run catalog   # refresh catalog.json for the built package
+npm run check     # 语法、manifest、密钥扫描
+npm test          # 单元测试（不联网）
+npm run build     # 生成 dist/<id>-<版本>.tmplugin（需要 TM_REPO 指向 token-monitor 检出）
+npm run catalog   # 用构建产物刷新 catalog.json
 ```
 
-Live WakaTime checks are opt-in: `WAKATIME_OAUTH_TOKEN=... npm test` runs the statusbar parse test.
+真实 WakaTime 校验是可选的：`WAKATIME_OAUTH_TOKEN=... npm test` 才会跑 statusbar 解析测试。
 
-## License and credits
+## 许可证与致谢
 
-MIT. Plugin API and packager come from [Token Monitor](https://github.com/Javis603/token-monitor); WakaTime is a separate service. Icon is original artwork in this repository.
+MIT。插件 API 与打包器来自 [Token Monitor](https://github.com/Javis603/token-monitor)；WakaTime 是独立服务。图标为本仓库原创。

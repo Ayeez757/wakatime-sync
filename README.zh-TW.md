@@ -1,3 +1,5 @@
+<p align="right"><a href="./README.md">简体中文</a> | <a href="./README.en.md">English</a> | <strong>繁體中文</strong></p>
+
 # Token Monitor 的 WakaTime 同步
 
 把 Token Monitor 的 AI token 用量以 WakaTime 的 **AI Coding** 心跳上報，并在紧凑卡片里讀回 WakaTime 当天資料。
