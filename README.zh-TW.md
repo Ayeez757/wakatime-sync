@@ -4,7 +4,7 @@
 
 把 Token Monitor 的 AI token 用量以 WakaTime 的 **AI Coding** 心跳上報，並在緊湊卡片裡讀回 WakaTime 當天資料。
 
-![WakaTime 同步卡片：Hub 接管狀態、今日 token 與 WakaTime 統計](docs/images/overview.png)
+![WakaTime 同步：卡片、外掛資訊與設定（API key 與 OAuth token 已隱藏）](docs/images/overview.png)
 
 單機可用，共享 Hub 的多裝置情境也有配套的 Hub 橋（本倉庫 `hub-bridge/`）。
 

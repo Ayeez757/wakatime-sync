@@ -4,7 +4,7 @@
 
 Send Token Monitor's AI token usage to [WakaTime](https://wakatime.com) as **AI Coding** heartbeats, and read your WakaTime day back in a compact card.
 
-![WakaTime sync card: Hub upload state, today's tokens and WakaTime stats](docs/images/overview.png)
+![WakaTime sync: card, plugin details and settings (API key and OAuth token redacted)](docs/images/overview.png)
 
 Works on a single machine and on a multi-device Token Monitor Hub (a Hub-side bridge is included in this repository).
 
