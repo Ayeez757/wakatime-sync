@@ -3,6 +3,9 @@
 # Token Monitor 的 WakaTime 同步
 
 把 Token Monitor 的 AI token 用量以 WakaTime 的 **AI Coding** 心跳上报，并在紧凑卡片里读回 WakaTime 当天数据。
+
+![WakaTime 同步卡片：Hub 接管状态、今日 token 与 WakaTime 统计](docs/images/overview.png)
+
 单机可用，共享 Hub 的多设备场景也有配套的 Hub 桥（本仓库 `hub-bridge/`）。
 
 > 非官方社区集成，与 WakaTime 官方及 Token Monitor 维护者无关。
