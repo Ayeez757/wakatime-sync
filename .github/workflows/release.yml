@@ -27,4 +27,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="${GITHUB_REF_NAME}"
-          gh release create "$TAG" dist/*.tmplugin --title "$TAG" --generate-notes --repo "$GITHUB_REPOSITORY"
+          VERSION="${TAG#v}"
+          # dist keeps older packages for catalog history; a release only ships
+          # the package built from this tag.
+          gh release create "$TAG" "dist/wakatime-sync-${VERSION}.tmplugin" --title "$TAG" --generate-notes --repo "$GITHUB_REPOSITORY"

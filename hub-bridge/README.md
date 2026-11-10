@@ -2,6 +2,10 @@
 
 Headless Node process that turns a Token Monitor Hub into a WakaTime uploader, and answers the desktop plugin's presence handshake.
 
+This is **not a Token Monitor plugin** (plugins run inside the desktop App; a Hub has no App). It is a standalone service that shares
+`shared/wakatime-core.cjs` with the plugin for identical diff/payload/User-Agent behavior, and adds Hub polling, device conversion and
+the presence server. It is distributed from this repository only, not through the Token Monitor community plugin catalog.
+
 It reads the Hub's authenticated `GET /api/stats`, diffs each device's session token counters with the shared core, and posts `ai coding` heartbeats with the device's hostname (`X-Machine-Name`) and timezone.
 The Hub stays the single uploader for every device on it; a desktop plugin that can reach this bridge stands by automatically.
 
