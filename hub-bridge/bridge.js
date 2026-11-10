@@ -16,7 +16,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const core = require('../shared/wakatime-core.cjs');
 
-const BRIDGE_VERSION = '0.4.0';
+const BRIDGE_VERSION = '0.5.0';
 const BULK_LIMIT = core.BULK_LIMIT;
 const PRESENCE_ENTRY_TTL_MS = 60 * 60 * 1000;
 const PRESENCE_MAX_ENTRIES = 64;
@@ -88,6 +88,7 @@ function loadConfig(args) {
     presenceHost: env.TOKEN_MONITOR_WAKATIME_PRESENCE_HOST || file.presenceHost || '0.0.0.0',
     presencePort: Number(env.TOKEN_MONITOR_WAKATIME_PRESENCE_PORT || file.presencePort || 17322),
     presenceEnabled: file.presenceEnabled !== false,
+    language: file.language || 'ai',
     userAgentProduct: file.userAgentProduct || 'token-monitor',
   };
   if (!(config.pollSeconds >= 5)) config.pollSeconds = 60;
@@ -324,6 +325,7 @@ Environment: TOKEN_MONITOR_HUB_URL, TOKEN_MONITOR_SECRET, WAKATIME_API_KEY,
     projectPrefix: config.projectPrefix,
     category: 'ai coding',
     includeCacheTokens: true,
+    language: config.language,
     timezone: config.timezone,
   };
 

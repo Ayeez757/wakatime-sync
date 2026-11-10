@@ -22,6 +22,7 @@ Copy `config.example.json` to `~/.config/wakatime-bridge/config.json` (mode 0600
 | `wakatimeApiKey` | Write-only WakaTime plugin key (or set `WAKATIME_API_KEY`). |
 | `pollSeconds` | Upload interval, default 60. |
 | `timezone` | IANA zone for the `Timezone` header. Defaults to the process zone; set it explicitly on a UTC server. |
+| `language` | Heartbeat language: `ai` (default), `text`, `client`, or `none`. Without it WakaTime buckets the heartbeats under "Other". |
 | `devices` | `[]` = every Hub device; otherwise a list of device ids. |
 | `projectPrefix` / `projectOverrides` | Project naming tweaks. |
 | `presenceEnabled`, `presenceHost`, `presencePort` | Presence endpoint; defaults `true`, `0.0.0.0`, `17322`. |

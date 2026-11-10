@@ -77,6 +77,7 @@ test('diffs emit one heartbeat per session with summed model deltas', () => {
   assert.equal(heartbeat.ai_input_tokens, 400);
   assert.equal(heartbeat.ai_output_tokens, 100);
   assert.equal(heartbeat.project, 'PianoPath');
+  assert.equal(heartbeat.language, 'AI');
   assert.equal(heartbeat._hostname, 'TESTBOX');
   assert.equal(heartbeat._timezone, 'Asia/Shanghai');
 });

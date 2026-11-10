@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- Heartbeats now carry a WakaTime `language` (new **Heartbeat language** setting: AI by default, or Text, tool name, or none), so AI activity no longer lands in WakaTime's "Other" language bucket.
+- Hub bridge gets the same `language` option (default `ai`) and reports version 0.5.0.
+
 ## 0.4.0
 
 Repository and correctness release.

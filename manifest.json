@@ -11,7 +11,7 @@
     "zh-CN": "把 Token Monitor 的 AI token 用量作为 WakaTime 心跳上报，并在卡片里显示 WakaTime 当天数据；单机或共享 Hub 都能用。",
     "zh-TW": "把 Token Monitor 的 AI token 用量作為 WakaTime 心跳上報，並在卡片裡顯示 WakaTime 當天資料；單機或共享 Hub 都能用。"
   },
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "Ayeez757",
   "homepage": "https://github.com/Ayeez757/wakatime-sync",
   "ui": "ui.mjs",
@@ -60,7 +60,7 @@
     }
   ],
   "settings": {
-    "version": 3,
+    "version": 4,
     "fields": [
       {
         "id": "enabled",
@@ -195,6 +195,55 @@
               "en": "Researching",
               "zh-CN": "Researching",
               "zh-TW": "Researching"
+            }
+          }
+        ]
+      },
+      {
+        "id": "language",
+        "type": "select",
+        "label": {
+          "en": "Heartbeat language",
+          "zh-CN": "心跳语言",
+          "zh-TW": "心跳語言"
+        },
+        "description": {
+          "en": "WakaTime shows heartbeats without a language under \"Other\". AI tags them as AI; Text uses WakaTime's Text language; client uses the tool name; none leaves them language-less.",
+          "zh-CN": "没有语言的心跳会在 WakaTime 里显示为 Other。AI 标为 AI；Text 使用 WakaTime 的 Text；client 用工具名；none 不写语言。",
+          "zh-TW": "沒有語言的心跳會在 WakaTime 裡顯示為 Other。AI 標為 AI；Text 使用 WakaTime 的 Text；client 用工具名；none 不寫語言。"
+        },
+        "default": "ai",
+        "options": [
+          {
+            "value": "ai",
+            "label": {
+              "en": "AI",
+              "zh-CN": "AI",
+              "zh-TW": "AI"
+            }
+          },
+          {
+            "value": "text",
+            "label": {
+              "en": "Text",
+              "zh-CN": "Text",
+              "zh-TW": "Text"
+            }
+          },
+          {
+            "value": "client",
+            "label": {
+              "en": "Tool name",
+              "zh-CN": "工具名",
+              "zh-TW": "工具名"
+            }
+          },
+          {
+            "value": "none",
+            "label": {
+              "en": "No language (Other)",
+              "zh-CN": "不写语言（Other）",
+              "zh-TW": "不寫語言（Other）"
             }
           }
         ]

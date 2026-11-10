@@ -98,8 +98,17 @@ function stateKey(row, model) {
   return `${row.deviceId || 'aggregate'}|${row.client || 'unknown'}|${sessionAnchor(row)}|${model}`;
 }
 
+function heartbeatLanguage(settings, row) {
+  const choice = settings.language || 'ai';
+  if (choice === 'none') return '';
+  if (choice === 'text') return 'Text';
+  if (choice === 'client') return row.client || '';
+  return 'AI';
+}
+
 function makeHeartbeat(settings, row, tokens, time, sessionLabel) {
   const project = projectNameFor(settings, row);
+  const language = heartbeatLanguage(settings, row);
   return {
     entity: `token-monitor:${row.client || 'unknown'}`,
     type: 'app',
@@ -110,6 +119,7 @@ function makeHeartbeat(settings, row, tokens, time, sessionLabel) {
     ai_input_tokens: Math.round(tokens.input),
     ai_output_tokens: Math.round(tokens.output),
     ...(project ? { project } : {}),
+    ...(language ? { language } : {}),
     // Transport-only metadata, stripped before the request body is sent.
     // Per-row values let one bridge process group heartbeats per Hub device.
     _hostname: row.hostname || settings.hostname || '',

@@ -67,6 +67,7 @@ Never run two uploaders for the same sessions (this plugin, the Hub bridge, Waka
 | WakaTime OAuth access token | — | Read-only stats for the card. |
 | Which sessions to upload | auto | `auto` resolves this machine through Hub devices; `this-device` pins it; `aggregate` uploads the whole Hub. If the hostname cannot be matched on a multi-device Hub the plugin **fails closed** instead of uploading other machines. |
 | WakaTime category | ai coding | `coding` merges with manual coding; other WakaTime categories are available. |
+| Heartbeat language | AI | Language reported to WakaTime (`AI`, `Text`, tool name, or none). Without it WakaTime buckets heartbeats under "Other". |
 | Count cached input tokens | on | Adds cache read/write tokens to `ai_input_tokens`. |
 | Project name source | label | Token Monitor label, workspace folder, or no project. |
 | Project name prefix | — | Optional, e.g. `ai-`. |

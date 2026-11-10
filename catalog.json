@@ -20,6 +20,20 @@
       "author": "Ayeez757",
       "versions": [
         {
+          "version": "0.5.0",
+          "types": [
+            "widget",
+            "page",
+            "automation"
+          ],
+          "url": "https://raw.githubusercontent.com/Ayeez757/wakatime-sync/main/dist/wakatime-sync-0.5.0.tmplugin",
+          "sha256": "b6fbb9b8a8a3c3457f148733049312241e98af2a26b7db3d3058e3357939159b",
+          "engines": {
+            "tokenMonitor": ">=0.82.0"
+          },
+          "changelog": "See https://github.com/Ayeez757/wakatime-sync/blob/main/CHANGELOG.md"
+        },
+        {
           "version": "0.4.0",
           "types": [
             "widget",

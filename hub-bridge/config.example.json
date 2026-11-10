@@ -12,5 +12,6 @@
   "presencePort": 17322,
   "dryRun": false,
   "postInitial": false,
-  "backfillWindowMinutes": 15
+  "backfillWindowMinutes": 15,
+  "language": "ai"
 }

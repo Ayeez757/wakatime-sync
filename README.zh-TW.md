@@ -66,6 +66,7 @@ AI **模型**歸屬交给 WakaTime 自己的 CLI 解析器：我们试过往 UA 
 | WakaTime OAuth access token | — | 卡片读統計 |
 | 上報哪些工作階段 | auto | 用 Hub 设备列表定位本机；多设备 Hub 上匹配不到本机时**直接暂停上報**，绝不误传其他设备；`aggregate` 才上報全 Hub |
 | WakaTime 分類 | ai coding | 选 `coding` 会并入手工编码，也可选其他分類 |
+| 心跳語言 | AI | 上報給 WakaTime 的語言（`AI`、`Text`、工具名或不寫）。不寫時 WakaTime 會歸到 `Other`。 |
 | 计入快取 token | 开 | 把快取读/写计入 `ai_input_tokens` |
 | 專案名来源 | label | Token Monitor 專案名 / 工作区檔案夹名 / 不上報 |
 | 專案名前缀 | — | 可选，例如 `ai-` |
